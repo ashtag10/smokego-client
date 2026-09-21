@@ -155,17 +155,7 @@ export const MegaMenu = ({
             )
           })}
 
-        <Link
-          href="/reservations"
-          onClick={onNavigate}
-          className="flex items-center justify-between border-b border-gray-100 px-5 py-4 text-[13px] font-medium uppercase tracking-[0.05em] text-black"
-        >
-          Réservation Lounge
-          <ChevronRight
-            className="h-5 w-5 text-purple-600"
-            strokeWidth={1.5}
-          />
-        </Link>
+        
 
         <Link
           href="/loyalty"
