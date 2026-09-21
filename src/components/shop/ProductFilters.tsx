@@ -1,458 +1,206 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   SlidersHorizontal,
-  CircleDollarSign,
   RotateCcw,
-  Check,
-  ChevronDown,
-  Tag,
+  Search,
+  PackageCheck,
 } from 'lucide-react'
+import type { ProductFilters as ProductFiltersType } from '@/lib/types/product'
 
-import { PrimaryButton } from '@/components/ui/Button/PrimaryButton'
-import { SecondaryButton } from '@/components/ui/Button/SecondaryButton'
-
-interface BrandCount {
-  brand: string
-  count: number
+interface ProductFiltersProps {
+  onFilterChange: (filters: Partial<ProductFiltersType>) => void
+  onReset: () => void
 }
 
-interface CategoryFiltersProps {
-  brands: BrandCount[]
-  priceRange: { min: number; max: number }
-  selectedBrands: string[]
-  selectedPrice: { min?: number; max?: number }
-  onChange: (next: { brands: string[]; price: { min?: number; max?: number } }) => void
-}
-
-export const CategoryFilters = ({
-  brands,
-  priceRange,
-  selectedBrands,
-  selectedPrice,
-  onChange,
-}: CategoryFiltersProps) => {
-  // État "brouillon" — appliqué seulement au clic sur "Appliquer les filtres",
-  // même logique que ProductFilters (category/sortBy/minPrice/maxPrice)
-  const [draftBrands, setDraftBrands] = useState<string[]>(selectedBrands)
-  const [minPrice, setMinPrice] = useState<string>(
-    selectedPrice.min !== undefined ? String(selectedPrice.min) : ''
-  )
-  const [maxPrice, setMaxPrice] = useState<string>(
-    selectedPrice.max !== undefined ? String(selectedPrice.max) : ''
-  )
-
+export const ProductFilters = ({
+  onFilterChange,
+  onReset,
+}: ProductFiltersProps) => {
+  const [brand, setBrand] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
+  const [inStock, setInStock] = useState(false)
+  const [sortBy, setSortBy] =
+    useState<ProductFiltersType['sortBy']>('newest')
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
-  useEffect(() => {
-    setDraftBrands(selectedBrands)
-  }, [selectedBrands])
-
-  useEffect(() => {
-    setMinPrice(selectedPrice.min !== undefined ? String(selectedPrice.min) : '')
-    setMaxPrice(selectedPrice.max !== undefined ? String(selectedPrice.max) : '')
-  }, [selectedPrice.min, selectedPrice.max])
-
-  const toggleDraftBrand = (brand: string) => {
-    setDraftBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    )
-  }
-
-  /* =========================================================
-     APPLIQUER
-  ========================================================= */
-
   const handleApply = () => {
-    onChange({
-      brands: draftBrands,
-      price: {
-        min: minPrice ? parseFloat(minPrice) : undefined,
-        max: maxPrice ? parseFloat(maxPrice) : undefined,
-      },
+    onFilterChange({
+      brand: brand.trim() || undefined,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      inStock: inStock || undefined,
+      sortBy,
+      page: 1,
     })
 
     setIsMobileOpen(false)
   }
 
-  /* =========================================================
-     RÉINITIALISER
-  ========================================================= */
-
   const handleReset = () => {
-    setDraftBrands([])
+    setBrand('')
     setMinPrice('')
     setMaxPrice('')
+    setInStock(false)
+    setSortBy('newest')
 
-    onChange({ brands: [], price: {} })
+    onReset()
+    setIsMobileOpen(false)
   }
 
-  return (
-    <div className="w-full lg:w-72">
-      {/* =====================================================
-          MOBILE — BOUTON FILTRE
-      ====================================================== */}
-
-      <button
-        type="button"
-        onClick={() => setIsMobileOpen((previous) => !previous)}
-        aria-expanded={isMobileOpen}
-        aria-controls="mobile-category-filters"
-        className="
-          flex
-          w-full
-          items-center
-          justify-between
-          gap-4
-          rounded-2xl
-          border
-          border-grey-200
-          bg-white
-          px-4
-          py-4
-          transition-colors
-          duration-200
-          lg:hidden
-          hover:bg-[#FAF9F7]
-        "
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="
-              flex
-              h-10
-              w-10
-              shrink-0
-              items-center
-              justify-center
-              rounded-xl
-              bg-black-main
-              text-gold-main
-              shadow-sm
-            "
-          >
-            <SlidersHorizontal className="h-4.5 w-4.5" strokeWidth={2} />
-          </div>
-
-          <div className="text-left">
-            <p className="text-sm font-semibold text-black-main">Filtrer par</p>
-            <p className="mt-0.5 text-xs text-grey-500">Marques et prix</p>
-          </div>
-        </div>
-
-        <div
-          className="
-            flex
-            h-9
-            w-9
-            shrink-0
-            items-center
-            justify-center
-            rounded-full
-            border
-            border-gold-main/20
-            bg-gold-main/5
-          "
+  const filterContent = (
+    <div className="space-y-6">
+      {/* Brand */}
+      <div>
+        <label
+          htmlFor="product-brand"
+          className="mb-2 block text-sm font-medium text-gray-700"
         >
-          <ChevronDown
-            className={`h-4 w-4 text-gold-main transition-transform duration-300 ${
-              isMobileOpen ? 'rotate-180' : 'rotate-0'
-            }`}
+          Marque
+        </label>
+
+        <div className="relative">
+          <Search
+            size={17}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
           />
-        </div>
-      </button>
 
-      {/* =====================================================
-          MOBILE — PANNEAU DÉROULANT
-      ====================================================== */}
-
-      <div
-        id="mobile-category-filters"
-        className={`grid lg:hidden transition-[grid-template-rows] duration-300 ease-out ${
-          isMobileOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-        }`}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <div className="mt-3 rounded-2xl border border-grey-100 bg-white px-4 pb-5 pt-5">
-            <FilterContent
-              brands={brands}
-              priceRange={priceRange}
-              draftBrands={draftBrands}
-              onToggleBrand={toggleDraftBrand}
-              minPrice={minPrice}
-              setMinPrice={setMinPrice}
-              maxPrice={maxPrice}
-              setMaxPrice={setMaxPrice}
-              onApply={handleApply}
-              onReset={handleReset}
-            />
-          </div>
+          <input
+            id="product-brand"
+            type="text"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            placeholder="Ex. ADALYA"
+            className="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
+          />
         </div>
       </div>
 
-      {/* =====================================================
-          DESKTOP — FILTRES VISIBLES
-      ====================================================== */}
+      {/* Price */}
+      <div>
+        <p className="mb-2 text-sm font-medium text-gray-700">
+          Prix
+        </p>
 
-      <div className="hidden lg:block">
-        <div
-          className="
-            relative
-            overflow-hidden
-            rounded-2xl
-            border
-            border-grey-200
-            bg-white
-            shadow-[0_10px_40px_rgba(0,0,0,0.06)]
-          "
-        >
-          <div
-            aria-hidden="true"
-            className="
-              pointer-events-none
-              absolute
-              -right-24
-              -top-24
-              h-48
-              w-48
-              rounded-full
-              bg-gold-main/5
-              blur-3xl
-            "
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            type="number"
+            min="0"
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
+            placeholder="Min"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
           />
 
-          <div className="relative p-5 lg:p-6">
-            <div className="mb-6 flex items-center gap-3">
-              <div
-                className="
-                  flex
-                  h-10
-                  w-10
-                  shrink-0
-                  items-center
-                  justify-center
-                  rounded-xl
-                  bg-black-main
-                  text-gold-main
-                  shadow-sm
-                "
-              >
-                <SlidersHorizontal className="h-5 w-5" strokeWidth={2} />
-              </div>
-
-              <div>
-                <h3 className="text-base font-semibold text-black-main">Filtrer par</h3>
-                <p className="mt-0.5 text-xs text-grey-500">Marques et fourchette de prix</p>
-              </div>
-            </div>
-
-            <FilterContent
-              brands={brands}
-              priceRange={priceRange}
-              draftBrands={draftBrands}
-              onToggleBrand={toggleDraftBrand}
-              minPrice={minPrice}
-              setMinPrice={setMinPrice}
-              maxPrice={maxPrice}
-              setMaxPrice={setMaxPrice}
-              onApply={handleApply}
-              onReset={handleReset}
-              desktop
-            />
-          </div>
+          <input
+            type="number"
+            min="0"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            placeholder="Max"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
+          />
         </div>
+      </div>
+
+      {/* Stock */}
+      <label className="flex cursor-pointer items-center gap-3 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          checked={inStock}
+          onChange={(e) => setInStock(e.target.checked)}
+          className="h-4 w-4 rounded border-gray-300 accent-[#D4AF37]"
+        />
+
+        <span className="flex items-center gap-2">
+          <PackageCheck size={17} />
+          Produits disponibles uniquement
+        </span>
+      </label>
+
+      {/* Sort */}
+      <div>
+        <label
+          htmlFor="product-sort"
+          className="mb-2 block text-sm font-medium text-gray-700"
+        >
+          Trier par
+        </label>
+
+        <select
+          id="product-sort"
+          value={sortBy ?? 'newest'}
+          onChange={(e) =>
+            setSortBy(
+              e.target.value as ProductFiltersType['sortBy'],
+            )
+          }
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
+        >
+          <option value="newest">Plus récents</option>
+          <option value="popularity">Popularité</option>
+          <option value="price_asc">Prix croissant</option>
+          <option value="price_desc">Prix décroissant</option>
+        </select>
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={handleReset}
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+        >
+          <RotateCcw size={16} />
+          Réinitialiser
+        </button>
+
+        <button
+          type="button"
+          onClick={handleApply}
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#D4AF37] px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-[#C5A028]"
+        >
+          <SlidersHorizontal size={16} />
+          Appliquer
+        </button>
       </div>
     </div>
   )
-}
 
-/* ============================================================
-   FILTER CONTENT
-============================================================ */
-
-interface FilterContentProps {
-  brands: BrandCount[]
-  priceRange: { min: number; max: number }
-  draftBrands: string[]
-  onToggleBrand: (brand: string) => void
-
-  minPrice: string
-  setMinPrice: (value: string) => void
-
-  maxPrice: string
-  setMaxPrice: (value: string) => void
-
-  onApply: () => void
-  onReset: () => void
-
-  desktop?: boolean
-}
-
-const FilterContent = ({
-  brands,
-  priceRange,
-  draftBrands,
-  onToggleBrand,
-  minPrice,
-  setMinPrice,
-  maxPrice,
-  setMaxPrice,
-  onApply,
-  onReset,
-  desktop = false,
-}: FilterContentProps) => {
   return (
     <>
-      {/* =====================================================
-          MARQUES
-      ====================================================== */}
-
-      {brands.length > 0 && (
-        <div className="mb-5">
-          <label className="mb-2 flex items-center gap-1.5 text-sm font-medium text-black-main">
-            <Tag className="h-4 w-4 text-gold-main" />
-            Marques
-          </label>
-
-          <div className="max-h-56 space-y-1 overflow-y-auto rounded-lg border border-grey-100 bg-grey-50 p-2">
-            {brands.map(({ brand, count }) => {
-              const checked = draftBrands.includes(brand)
-              return (
-                <label
-                  key={brand}
-                  className={`
-                    flex cursor-pointer items-center justify-between gap-2
-                    rounded-md px-2.5 py-2 text-sm transition-colors duration-150
-                    ${checked ? 'bg-white text-black-main shadow-sm' : 'text-grey-600 hover:bg-white/70'}
-                  `}
-                >
-                  <span className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => onToggleBrand(brand)}
-                      className="h-4 w-4 rounded border-grey-300 text-gold-main focus:ring-gold-main/30"
-                    />
-                    {brand}
-                  </span>
-                  <span className="text-xs text-grey-400">{count}</span>
-                </label>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================
-          PRIX MIN / MAX
-      ====================================================== */}
-
-      {priceRange.max > priceRange.min && (
-        <div
-          className={`grid gap-4 ${desktop ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}
+      {/* Mobile */}
+      <div className="mb-4 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen((prev) => !prev)}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-800"
         >
-          <div>
-            <label
-              htmlFor={desktop ? 'cat-min-price-desktop' : 'cat-min-price-mobile'}
-              className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-black-main"
-            >
-              <CircleDollarSign className="h-4 w-4 text-gold-main" />
-              Prix minimum
-            </label>
+          <SlidersHorizontal size={18} />
+          {isMobileOpen ? 'Masquer les filtres' : 'Afficher les filtres'}
+        </button>
 
-            <div className="relative">
-              <input
-                id={desktop ? 'cat-min-price-desktop' : 'cat-min-price-mobile'}
-                type="number"
-                min={priceRange.min}
-                inputMode="numeric"
-                placeholder={String(priceRange.min)}
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="
-                  h-[50px] w-full rounded-lg border border-grey-200 bg-grey-50
-                  px-4 pr-16 text-sm text-black-main placeholder:text-grey-400
-                  transition-all duration-200
-                  hover:border-grey-300
-                  focus:border-gold-main focus:bg-white focus:outline-none focus:ring-4 focus:ring-gold-main/10
-                "
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-grey-400">
-                FCFA
-              </span>
-            </div>
+        {isMobileOpen && (
+          <div className="mt-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+            {filterContent}
           </div>
-
-          <div>
-            <label
-              htmlFor={desktop ? 'cat-max-price-desktop' : 'cat-max-price-mobile'}
-              className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-black-main"
-            >
-              <CircleDollarSign className="h-4 w-4 text-gold-main" />
-              Prix maximum
-            </label>
-
-            <div className="relative">
-              <input
-                id={desktop ? 'cat-max-price-desktop' : 'cat-max-price-mobile'}
-                type="number"
-                min={priceRange.min}
-                inputMode="numeric"
-                placeholder={String(priceRange.max)}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="
-                  h-[50px] w-full rounded-lg border border-grey-200 bg-grey-50
-                  px-4 pr-16 text-sm text-black-main placeholder:text-grey-400
-                  transition-all duration-200
-                  hover:border-grey-300
-                  focus:border-gold-main focus:bg-white focus:outline-none focus:ring-4 focus:ring-gold-main/10
-                "
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-grey-400">
-                FCFA
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================
-          DIVIDER
-      ====================================================== */}
-
-      <div className="my-6 h-px bg-gradient-to-r from-transparent via-grey-200 to-transparent" />
-
-      {/* =====================================================
-          ACTIONS
-      ====================================================== */}
-
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <SecondaryButton
-          onClick={onReset}
-          className="
-            flex items-center justify-center gap-2 border-grey-200
-            transition-all duration-200
-            hover:border-gold-main/40 hover:text-gold-main
-          "
-        >
-          <RotateCcw className="h-4 w-4" />
-          Réinitialiser
-        </SecondaryButton>
-
-        <PrimaryButton
-          onClick={onApply}
-          className="
-            flex items-center justify-center gap-2 shadow-md shadow-gold-main/10
-            transition-all duration-200
-            hover:-translate-y-0.5 hover:shadow-lg hover:shadow-gold-main/20
-          "
-        >
-          <Check className="h-4 w-4" />
-          Appliquer les filtres
-        </PrimaryButton>
+        )}
       </div>
+
+      {/* Desktop */}
+      <aside className="hidden w-full rounded-xl border border-gray-200 bg-white p-5 shadow-sm lg:block">
+        <div className="mb-5 flex items-center gap-2 border-b border-gray-200 pb-4">
+          <SlidersHorizontal size={19} className="text-[#D4AF37]" />
+
+          <h2 className="text-base font-semibold text-gray-900">
+            Filtrer les produits
+          </h2>
+        </div>
+
+        {filterContent}
+      </aside>
     </>
   )
 }
