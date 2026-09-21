@@ -10,13 +10,14 @@ interface HeadingProps {
   gold?: boolean
 }
 
+// Tailles RÉDUITES et sans-serif pour coller à El-Badia
 const headingStyles: Record<HeadingLevel, string> = {
-  h1: 'text-4xl md:text-5xl lg:text-6xl',
-  h2: 'text-3xl md:text-4xl lg:text-5xl',
-  h3: 'text-2xl md:text-3xl lg:text-4xl',
-  h4: 'text-xl md:text-2xl lg:text-3xl',
-  h5: 'text-lg md:text-xl lg:text-2xl',
-  h6: 'text-base md:text-lg lg:text-xl',
+  h1: 'text-[18px] sm:text-[20px]',
+  h2: 'text-[15px] sm:text-[16px]',
+  h3: 'text-[14px] sm:text-[15px]',
+  h4: 'text-[13px] sm:text-[14px]',
+  h5: 'text-[12px] sm:text-[13px]',
+  h6: 'text-[11px] sm:text-[12px]',
 }
 
 export const Heading = ({
@@ -27,8 +28,9 @@ export const Heading = ({
 }: HeadingProps) => {
   const Component = level
   const styles = cn(
-    'font-serif font-bold leading-tight',
-    gold ? 'text-gold-main' : 'text-black-main',
+    // Police sans-serif (comme El-Badia) au lieu de serif
+    'font-sans font-bold leading-tight',
+    gold ? 'text-gold-main' : 'text-black',
     headingStyles[level],
     className
   )

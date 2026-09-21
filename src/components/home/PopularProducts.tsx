@@ -39,52 +39,15 @@ export const PopularProducts = () => {
   ========================== */
   if (isLoading) {
     return (
-      <section className="bg-grey-50 py-12 md:py-14">
-        <div
-          className="
-            mx-auto
-            w-full
-            max-w-[1600px]
-            px-2
-            sm:px-3
-            lg:px-4
-          "
-        >
-          {/* HEADER */}
-          <div className="mb-7 flex items-center gap-3">
-            <span
-              className="
-                h-9
-                w-1
-                shrink-0
-                rounded-full
-                bg-gradient-to-b
-                from-[#C89B3C]
-                via-[#D4AF37]
-                to-[#B8860B]
-              "
-            />
+      <section className="bg-grey-50 py-10">
+        <div className="mx-auto w-full max-w-[1600px] px-2 sm:px-3 lg:px-4">
+          <Heading level="h2">Produits populaires</Heading>
 
-            <Heading level="h2">
-              Produits populaires
-            </Heading>
-          </div>
-
-          {/* SKELETONS */}
-          <div
-            className="
-              grid
-              grid-cols-2
-              gap-3
-              sm:gap-4
-              md:grid-cols-3
-              md:gap-5
-              lg:grid-cols-4
-              lg:gap-6
-            "
-          >
-            {Array.from({ length: 4 }).map((_, i) => (
-              <ProductCardSkeleton key={i} />
+          <div className="mt-5 flex gap-4 overflow-hidden">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="w-[47vw] shrink-0 sm:w-[30vw] lg:w-1/5">
+                <ProductCardSkeleton />
+              </div>
             ))}
           </div>
         </div>
@@ -103,106 +66,42 @@ export const PopularProducts = () => {
      CONTENT
   ========================== */
   return (
-    <section className="bg-grey-50 py-12 md:py-14">
-      <div
-        className="
-          mx-auto
-          w-full
-          max-w-[1600px]
-          px-2
-          sm:px-3
-          lg:px-4
-        "
-      >
+    <section className="bg-grey-50 py-10">
+      <div className="mx-auto w-full max-w-[1600px] px-2 sm:px-3 lg:px-4">
+        <Heading level="h2">Produits populaires</Heading>
 
-        {/* SECTION HEADER */}
-        <div className="mb-7 flex items-center justify-between">
-
-          {/* TITLE */}
-          <div className="flex items-center gap-3">
-            <span
-              className="
-                h-9
-                w-1
-                shrink-0
-                rounded-full
-                bg-gradient-to-b
-                from-[#C89B3C]
-                via-[#D4AF37]
-                to-[#B8860B]
-              "
-            />
-
-            <div>
-              <Heading level="h2">
-                Produits populaires
-              </Heading>
-
-              <p className="mt-1 text-xs text-grey-500 sm:text-sm">
-                Les produits préférés de nos clients
-              </p>
-            </div>
-          </div>
-
-          {/* BADGE */}
-          <div
-            className="
-              hidden
-              items-center
-              gap-2
-              rounded-full
-              border
-              border-[#D4AF37]/25
-              bg-white/70
-              px-3.5
-              py-1.5
-              text-xs
-              font-semibold
-              tracking-wide
-              text-[#B8860B]
-              shadow-[0_3px_10px_rgba(184,134,11,0.06)]
-              sm:inline-flex
-            "
-          >
-            <span
-              className="
-                h-1.5
-                w-1.5
-                rounded-full
-                bg-gradient-to-r
-                from-[#C89B3C]
-                to-[#D4AF37]
-              "
-            />
-
-            Best-sellers
-          </div>
-
-        </div>
-
-        {/* PRODUCTS */}
+        {/* PRODUCTS — first 5 visible, rest scrolls horizontally */}
         <div
           className="
-            grid
-            grid-cols-2
+            mt-5
+            flex
             gap-3
+            overflow-x-auto
+            scroll-smooth
+            snap-x
+            snap-mandatory
+            pb-2
             sm:gap-4
-            md:grid-cols-3
-            md:gap-5
-            lg:grid-cols-4
-            lg:gap-6
+            [-ms-overflow-style:none]
+            [scrollbar-width:none]
+            [&::-webkit-scrollbar]:hidden
           "
         >
-          {products
-            .slice(0, 4)
-            .map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
-            ))}
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="
+                w-[47vw]
+                shrink-0
+                snap-start
+                sm:w-[30vw]
+                lg:w-1/5
+              "
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
         </div>
-
       </div>
     </section>
   )

@@ -29,6 +29,8 @@ export const API_ENDPOINTS = {
     search: '/products/search',
     detail: (id: string) => `/products/${id}`,
     stock: (id: string) => `/products/${id}/stock`,
+    byCategory: (categorySlug: string) => `/products/category/${categorySlug}`,
+    categoryFilters: (slug: string) => `/products/category/${slug}/filters`,
   },
 
   // Reviews
@@ -123,5 +125,31 @@ export const API_ENDPOINTS = {
     topProducts: '/admin/stats/top-products',
     driverPerformance: '/admin/stats/driver-performance',
     auditLog: '/admin/audit-log',
+  },
+
+
+    // Categories
+  categories: {
+    menu: '/categories/menu',
+    list: '/categories',
+    detail: (id: string) => `/categories/${id}`,
+    bySlug: (slug: string) => `/categories/slug/${slug}`,
+    
+  },
+
+  // Slides
+  slides: {
+    list: '/slides',
+    admin: '/slides/admin',
+    detail: (id: string) => `/slides/${id}`,
+  },
+
+  // Stories
+  stories: {
+    list: '/stories',
+    admin: '/stories/admin',
+    detail: (id: string) => `/stories/${id}`,
+    items: (id: string) => `/stories/${id}/items`,
+    item: (id: string, itemId: string) => `/stories/${id}/items/${itemId}`,
   },
 } as const

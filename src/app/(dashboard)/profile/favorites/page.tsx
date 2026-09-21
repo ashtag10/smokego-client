@@ -2,24 +2,20 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Heart, ShoppingBag, Sparkles, ArrowRight } from 'lucide-react'
+import { ChevronRight, Heart, ShoppingBag, Info, Check } from 'lucide-react'
 
 import { useCart } from '@/lib/hooks/useCart'
 import { ProductCard } from '@/components/ui/Card/ProductCard'
-import { Paragraph } from '@/components/ui/Typography/Paragraph'
 import { toast } from 'react-hot-toast'
 import type { Product } from '@/lib/types/product'
 
 export default function FavoritesPage() {
   const { addItem } = useCart()
-
   const [favorites, setFavorites] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // TODO: Récupérer les favoris depuis l'API
-    // const fetchFavorites = async () => { ... }
-
     setIsLoading(false)
   }, [])
 
@@ -33,492 +29,195 @@ export default function FavoritesPage() {
     }
   }
 
-  /* =========================================================
-     LOADING
-  ========================================================= */
-
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#FAF9F7]">
-        <div className="mx-auto w-full max-w-[1600px] px-3 py-8 sm:px-4 sm:py-10 lg:px-6 lg:py-12">
-
-          {/* Header skeleton */}
-          <div className="relative mb-8 overflow-hidden rounded-2xl bg-black-main px-5 py-8 sm:px-8 md:mb-10 md:rounded-3xl md:py-10">
-            <div className="animate-pulse space-y-4">
-              <div className="h-8 w-40 rounded-full bg-white/10" />
-              <div className="h-10 w-72 rounded-lg bg-white/10" />
-              <div className="h-5 w-96 max-w-full rounded bg-white/10" />
-            </div>
-          </div>
-
-          {/* Products skeleton */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="overflow-hidden rounded-2xl border border-grey-100 bg-white"
-              >
-                <div className="aspect-square animate-pulse bg-grey-100" />
-
-                <div className="space-y-3 p-4">
-                  <div className="h-4 w-3/4 animate-pulse rounded bg-grey-100" />
-                  <div className="h-5 w-1/2 animate-pulse rounded bg-grey-100" />
-                </div>
-              </div>
-            ))}
-          </div>
+      <main className="min-h-screen bg-white">
+        <div className="mx-auto flex min-h-[60vh] max-w-[1600px] items-center justify-center px-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-200 border-t-purple-600" />
         </div>
       </main>
     )
   }
-
-  /* =========================================================
-     EMPTY STATE
-  ========================================================= */
-
-  if (favorites.length === 0) {
-    return (
-      <main className="min-h-screen bg-[#FAF9F7]">
-        <div className="mx-auto w-full max-w-[1600px] px-3 py-8 sm:px-4 sm:py-10 lg:px-6 lg:py-12">
-
-          {/* Hero */}
-          <section className="relative mb-8 overflow-hidden rounded-2xl bg-black-main px-5 py-8 sm:px-8 md:mb-10 md:rounded-3xl md:px-10 md:py-10">
-
-            {/* Glow */}
-            <div
-              aria-hidden="true"
-              className="
-                pointer-events-none
-                absolute -right-24 -top-24
-                h-72 w-72
-                rounded-full
-                bg-gold-main/10
-                blur-3xl
-              "
-            />
-
-            <div
-              aria-hidden="true"
-              className="
-                pointer-events-none
-                absolute -bottom-32 -left-24
-                h-72 w-72
-                rounded-full
-                bg-gold-main/5
-                blur-3xl
-              "
-            />
-
-            <div className="relative z-10">
-              {/* Badge */}
-              <div
-                className="
-                  mb-5
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  bg-gold-main
-                  px-4 py-2
-                  text-black-main
-                  shadow-[0_4px_24px_rgba(245,166,35,0.18)]
-                "
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-
-                <span className="text-[11px] font-semibold uppercase tracking-[0.16em] sm:text-xs">
-                  SmokeGo Collection
-                </span>
-              </div>
-
-              {/* Category */}
-              <p className="mb-2 flex items-center gap-2 text-sm font-medium tracking-wide text-gold-main sm:text-base">
-                <Heart className="h-4 w-4 fill-current" />
-                Mes favoris
-              </p>
-
-              {/* Title */}
-              <h1
-                className="
-                  max-w-3xl
-                  font-serif
-                  text-3xl
-                  font-semibold
-                  leading-[1.05]
-                  tracking-tight
-                  text-white
-                  sm:text-4xl
-                  md:text-5xl
-                  lg:text-6xl
-                "
-              >
-                Vos produits
-                <span className="mt-1 block text-gold-main">
-                  préférés
-                </span>
-              </h1>
-
-              <Paragraph
-                className="
-                  mt-5
-                  max-w-xl
-                  text-sm
-                  leading-relaxed
-                  text-white/60
-                  md:text-base
-                "
-              >
-                Retrouvez ici les produits que vous souhaitez garder
-                précieusement pour votre prochaine expérience SmokeGo.
-              </Paragraph>
-            </div>
-
-            {/* Gold line */}
-            <div
-              className="
-                absolute
-                bottom-0
-                left-5
-                right-5
-                sm:left-8
-                sm:right-8
-                md:left-10
-                md:right-10
-              "
-            >
-              <div className="h-px bg-gradient-to-r from-transparent via-gold-main/40 to-transparent" />
-            </div>
-          </section>
-
-          {/* Empty card */}
-          <section
-            className="
-              relative
-              overflow-hidden
-              rounded-2xl
-              border border-grey-100
-              bg-white
-              px-5 py-12
-              text-center
-              shadow-[0_10px_40px_rgba(0,0,0,0.04)]
-              sm:px-8
-              sm:py-16
-            "
-          >
-            {/* Decorative glow */}
-            <div
-              aria-hidden="true"
-              className="
-                pointer-events-none
-                absolute left-1/2 top-1/2
-                h-64 w-64
-                -translate-x-1/2
-                -translate-y-1/2
-                rounded-full
-                bg-gold-main/5
-                blur-3xl
-              "
-            />
-
-            <div className="relative z-10 mx-auto max-w-md">
-
-              {/* Icon */}
-              <div
-                className="
-                  mx-auto
-                  flex h-20 w-20
-                  items-center justify-center
-                  rounded-2xl
-                  border border-gold-main/20
-                  bg-gold-main/10
-                  text-gold-main
-                  shadow-[0_8px_30px_rgba(245,166,35,0.10)]
-                "
-              >
-                <Heart className="h-9 w-9" strokeWidth={1.6} />
-              </div>
-
-              <h2
-                className="
-                  mt-6
-                  font-serif
-                  text-2xl
-                  font-semibold
-                  text-black-main
-                  sm:text-3xl
-                "
-              >
-                Aucun favori pour le moment
-              </h2>
-
-              <Paragraph
-                muted
-                className="mt-3 text-sm leading-relaxed sm:text-base"
-              >
-                Explorez notre collection et ajoutez vos produits
-                préférés à vos favoris pour les retrouver facilement.
-              </Paragraph>
-
-              <Link
-                href="/shop"
-                className="
-                  group
-                  mt-7
-                  inline-flex
-                  items-center
-                  justify-center
-                  gap-2
-                  rounded-full
-                  bg-gold-main
-                  px-6
-                  py-3
-                  text-sm
-                  font-semibold
-                  text-black-main
-                  shadow-[0_8px_24px_rgba(245,166,35,0.18)]
-                  transition-all
-                  duration-300
-                  hover:-translate-y-0.5
-                  hover:shadow-[0_12px_30px_rgba(245,166,35,0.28)]
-                "
-              >
-                <ShoppingBag className="h-4 w-4" />
-
-                Découvrir la boutique
-
-                <ArrowRight
-                  className="
-                    h-4 w-4
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-1
-                  "
-                />
-              </Link>
-            </div>
-          </section>
-        </div>
-      </main>
-    )
-  }
-
-  /* =========================================================
-     FAVORITES
-  ========================================================= */
 
   return (
-    <main className="min-h-screen bg-[#FAF9F7]">
-      <div className="mx-auto w-full max-w-[1600px] px-3 py-8 sm:px-4 sm:py-10 lg:px-6 lg:py-12">
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
 
-        {/* =====================================================
-            HERO
-        ====================================================== */}
-
-        <section
-          className="
-            relative
-            mb-8
-            overflow-hidden
-            rounded-2xl
-            bg-black-main
-            px-5 py-8
-            sm:px-8
-            md:mb-10
-            md:rounded-3xl
-            md:px-10
-            md:py-10
-          "
+        {/* Fil d'Ariane */}
+        <nav
+          aria-label="Fil d'Ariane"
+          className="mb-8 flex items-center gap-2 text-[13px] text-gray-500"
         >
-          {/* Glow */}
-          <div
-            aria-hidden="true"
-            className="
-              pointer-events-none
-              absolute -right-24 -top-24
-              h-72 w-72
-              rounded-full
-              bg-gold-main/10
-              blur-3xl
-            "
-          />
+          <Link href="/" className="underline underline-offset-2 hover:text-black">
+            Accueil
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+          <Link href="/profile" className="underline underline-offset-2 hover:text-black">
+            Mon compte
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+          <span className="text-black">Mes favoris</span>
+        </nav>
 
-          <div
-            aria-hidden="true"
-            className="
-              pointer-events-none
-              absolute -bottom-32 -left-24
-              h-72 w-72
-              rounded-full
-              bg-gold-main/5
-              blur-3xl
-            "
-          />
+        {/* Layout 2 colonnes */}
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
 
-          <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          {/* =====================================================
+              SIDEBAR — Règles pour ajouter en favoris
+              (masquée sur mobile : hidden lg:block)
+          ===================================================== */}
+          <aside className="hidden w-full shrink-0 lg:block lg:w-72">
+            <div className="sticky top-24">
 
-            {/* Text */}
-            <div className="max-w-3xl">
-
-              {/* Badge */}
-              <div
-                className="
-                  mb-5
-                  inline-flex
-                  items-center
-                  gap-2
-                  rounded-full
-                  bg-gold-main
-                  px-4 py-2
-                  text-black-main
-                  shadow-[0_4px_24px_rgba(245,166,35,0.18)]
-                "
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-
-                <span className="text-[11px] font-semibold uppercase tracking-[0.16em] sm:text-xs">
-                  SmokeGo Collection
-                </span>
+              {/* Titre section */}
+              <div className="mb-5 flex items-center gap-3 border-b border-gray-100 pb-4">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+                  <Heart className="h-4 w-4" strokeWidth={2} />
+                </div>
+                <div>
+                  <h2 className="text-[14px] font-semibold text-black">
+                    Comment ajouter un favori ?
+                  </h2>
+                  <p className="mt-0.5 text-[12px] text-gray-500">
+                    Guide rapide
+                  </p>
+                </div>
               </div>
 
-              <p className="mb-2 flex items-center gap-2 text-sm font-medium tracking-wide text-gold-main sm:text-base">
-                <Heart className="h-4 w-4 fill-current" />
-                Mes favoris
-              </p>
+              {/* Règles */}
+              <div className="space-y-5">
 
-              <h1
-                className="
-                  font-serif
-                  text-3xl
-                  font-semibold
-                  leading-[1.05]
-                  tracking-tight
-                  text-white
-                  sm:text-4xl
-                  md:text-5xl
-                  lg:text-6xl
-                "
-              >
-                Vos produits
-                <span className="mt-1 block text-gold-main">
-                  préférés
-                </span>
-              </h1>
+                {/* Règle 1 */}
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-50 text-[12px] font-bold text-purple-600">
+                    1
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-black">
+                      Parcourez la boutique
+                    </p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-gray-500">
+                      Naviguez dans nos catégories et trouvez les produits qui vous plaisent.
+                    </p>
+                  </div>
+                </div>
 
-              <Paragraph
-                className="
-                  mt-5
-                  max-w-xl
-                  text-sm
-                  leading-relaxed
-                  text-white/60
-                  md:text-base
-                "
-              >
-                Retrouvez votre sélection personnelle de produits
-                SmokeGo et gardez vos essentiels toujours à portée de main.
-              </Paragraph>
-            </div>
+                {/* Règle 2 */}
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-50 text-[12px] font-bold text-purple-600">
+                    2
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-black">
+                      Cliquez sur le cœur
+                    </p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-gray-500">
+                      Sur chaque fiche produit, cliquez sur l'icône ❤️ pour l'ajouter à vos favoris.
+                    </p>
+                  </div>
+                </div>
 
-            {/* Counter */}
-            <div className="flex items-center gap-3 self-start lg:self-auto">
-              <div
-                className="
-                  flex h-12 w-12
-                  shrink-0
-                  items-center justify-center
-                  rounded-xl
-                  bg-gold-main
-                  text-black-main
-                  shadow-[0_4px_16px_rgba(245,166,35,0.12)]
-                "
-              >
-                <Heart
-                  className="h-5 w-5 fill-current"
-                  strokeWidth={2}
-                />
+                {/* Règle 3 */}
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-50 text-[12px] font-bold text-purple-600">
+                    3
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-black">
+                      Retrouvez-les ici
+                    </p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-gray-500">
+                      Tous vos favoris sont sauvegardés et accessibles à tout moment depuis cette page.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Règle 4 */}
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-50 text-[12px] font-bold text-purple-600">
+                    4
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-black">
+                      Ajoutez au panier
+                    </p>
+                    <p className="mt-1 text-[12px] leading-relaxed text-gray-500">
+                      Depuis vos favoris, ajoutez directement les produits à votre panier.
+                    </p>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <p className="text-2xl font-semibold leading-none text-white">
-                  {favorites.length}
-                </p>
-
-                <p className="mt-1 text-xs text-white/40">
-                  {favorites.length > 1
-                    ? 'produits favoris'
-                    : 'produit favori'}
+              {/* Note info */}
+              <div className="mt-6 flex items-start gap-2.5 rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <Info className="mt-0.5 h-4 w-4 shrink-0 text-purple-600" strokeWidth={1.8} />
+                <p className="text-[11px] leading-relaxed text-gray-600">
+                  Vos favoris sont enregistrés sur votre compte et restent disponibles même après déconnexion.
                 </p>
               </div>
-            </div>
-          </div>
 
-          {/* Gold line */}
-          <div className="absolute bottom-0 left-5 right-5 sm:left-8 sm:right-8 md:left-10 md:right-10">
-            <div className="h-px bg-gradient-to-r from-transparent via-gold-main/40 to-transparent" />
-          </div>
-        </section>
-
-        {/* =====================================================
-            PRODUCTS HEADER
-        ====================================================== */}
-
-        <section>
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-
-            <div className="flex shrink-0 items-center gap-3">
-              <div
-                className="
-                  flex h-10 w-10
-                  shrink-0
-                  items-center justify-center
-                  rounded-xl
-                  border border-grey-100
-                  bg-white
-                  text-gold-main
-                  shadow-sm
-                "
+              {/* CTA boutique */}
+              <Link
+                href="/"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-[13px] font-medium text-black transition-colors hover:border-purple-300 hover:text-purple-600"
               >
-                <Heart className="h-4 w-4 fill-current" />
-              </div>
+                <ShoppingBag className="h-4 w-4" />
+                Découvrir la boutique
+              </Link>
+            </div>
+          </aside>
 
-              <div>
-                <p className="text-sm font-semibold text-black-main">
-                  Ma sélection
+          {/* =====================================================
+              CONTENU PRINCIPAL
+          ===================================================== */}
+          <section className="min-w-0 flex-1">
+
+            {/* Titre */}
+            <h1 className="mb-12 text-[28px] font-bold leading-tight text-black sm:text-[32px]">
+              Mes favoris
+            </h1>
+
+            {/* Empty state ou grille produits */}
+            {favorites.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+
+                {/* Titre */}
+                <h2 className="mb-8 text-[16px] font-bold text-black">
+                  Qu'est-ce-qui fait battre ton coeur ?
+                </h2>
+
+                {/* Icône dans un cercle vert */}
+                <div className="mb-8 flex h-32 w-32 items-center justify-center rounded-full bg-[#D9F5D9]">
+                  <span className="text-[64px]" role="img" aria-label="Narguilé">
+                    🫖
+                  </span>
+                </div>
+
+                {/* Texte */}
+                <p className="mb-8 text-[14px] text-gray-600">
+                  Tous les articles ajoutés à tes favoris seront enregistrés ici
                 </p>
 
-                <p className="mt-0.5 text-xs text-grey-500">
-                  {favorites.length} produit
-                  {favorites.length > 1 ? 's' : ''} sauvegardé
-                  {favorites.length > 1 ? 's' : ''}
-                </p>
+                {/* Bouton orange */}
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center rounded-md bg-[#FFB800] px-6 py-3 text-[13px] font-bold uppercase tracking-wide text-black transition-colors hover:bg-[#E5A600]"
+                >
+                  Je shoppe
+                </Link>
               </div>
-            </div>
-
-            <div className="hidden h-px flex-1 bg-grey-100 sm:block" />
-
-            <div className="hidden shrink-0 items-center gap-2 sm:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-gold-main shadow-[0_0_6px_rgba(245,166,35,0.5)]" />
-
-              <span className="text-xs font-medium tracking-wide text-gold-main">
-                Collection SmokeGo
-              </span>
-            </div>
-          </div>
-
-          {/* ===================================================
-              PRODUCTS GRID
-          ==================================================== */}
-
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
-            {favorites.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
-        </section>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 xl:gap-6">
+                {favorites.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
       </div>
     </main>
   )

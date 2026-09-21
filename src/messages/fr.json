@@ -1,0 +1,25 @@
+{
+  "Navbar": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "about": "À propos",
+    "contact": "Contact",
+    "search": "Rechercher",
+    "cart": "Panier",
+    "account": "Mon compte",
+    "login": "Connexion"
+  },
+  "Product": {
+    "addToCart": "Ajouter au panier",
+    "outOfStock": "Rupture de stock",
+    "noImage": "Pas d'image",
+    "reviews": "avis"
+  },
+  "Common": {
+    "loading": "Chargement...",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer"
+  }
+}

@@ -1,21 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useCart } from '@/lib/hooks/useCart'
 import { CartItem } from '@/components/cart/CartItem'
 import { CartSummary } from '@/components/cart/CartSummary'
 import { EmptyCart } from '@/components/cart/EmptyCart'
-import { Heading } from '@/components/ui/Typography/Heading'
-import { Paragraph } from '@/components/ui/Typography/Paragraph'
 import { toast } from 'react-hot-toast'
-import {
-  ArrowLeft,
-  LockKeyhole,
-  Truck,
-  Sparkles,
-  ShoppingBag,
-  ShieldCheck,
-} from 'lucide-react'
+import { ArrowLeft, Lock, ShoppingBag } from 'lucide-react'
 
 export default function CartPage() {
   const router = useRouter()
@@ -29,137 +21,27 @@ export default function CartPage() {
       toast.error('Votre panier est vide')
       return
     }
-
     router.push('/checkout')
   }
 
   /* ============================================================
      LOADING
   ============================================================ */
-
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#FAF9F7]">
-        <div
-          className="
-            mx-auto
-            w-full
-            max-w-[1500px]
-            px-3
-            py-7
-            sm:px-5
-            sm:py-9
-            lg:px-8
-            lg:py-11
-          "
-        >
-          {/* Header skeleton */}
-
-          <div className="space-y-3">
-            <div className="h-4 w-28 rounded bg-grey-100 animate-pulse" />
-
-            <div className="h-10 w-48 rounded-lg bg-grey-100 animate-pulse" />
-
-            <div className="h-4 w-72 rounded bg-grey-100 animate-pulse" />
-          </div>
-
-          {/* Main skeleton */}
-
-          <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
-
-            {/* Items */}
-
-            <div className="lg:col-span-2">
-              <div
-                className="
-                  overflow-hidden
-                  rounded-2xl
-                  border
-                  border-grey-100
-                  bg-white
-                  shadow-[0_4px_20px_rgba(0,0,0,0.04)]
-                "
-              >
-                <div className="border-b border-grey-100 px-5 py-5 md:px-6">
-                  <div className="h-5 w-36 rounded bg-grey-100 animate-pulse" />
-
-                  <div className="mt-2 h-3 w-20 rounded bg-grey-100 animate-pulse" />
-                </div>
-
-                <div className="space-y-6 p-5 md:p-6">
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="
-                        flex
-                        gap-4
-                        border-b
-                        border-grey-100
-                        pb-6
-                        last:border-0
-                        last:pb-0
-                      "
-                    >
-                      <div
-                        className="
-                          h-24
-                          w-24
-                          shrink-0
-                          animate-pulse
-                          rounded-xl
-                          bg-grey-100
-                          md:h-28
-                          md:w-28
-                        "
-                      />
-
-                      <div className="flex-1 space-y-3">
-                        <div className="h-5 w-3/4 rounded bg-grey-100 animate-pulse" />
-
-                        <div className="h-4 w-1/2 rounded bg-grey-100 animate-pulse" />
-
-                        <div className="h-5 w-1/4 rounded bg-grey-100 animate-pulse" />
-
-                        <div className="h-9 w-32 rounded-lg bg-grey-100 animate-pulse" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+      <main className="min-h-screen bg-white">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 lg:px-8">
+          <div className="h-8 w-32 rounded bg-gray-100 animate-pulse" />
+          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-4">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-32 rounded-xl border border-gray-200 bg-gray-50 animate-pulse"
+                />
+              ))}
             </div>
-
-            {/* Summary */}
-
-            <div className="lg:col-span-1">
-              <div
-                className="
-                  rounded-2xl
-                  border
-                  border-grey-100
-                  bg-white
-                  p-6
-                  shadow-[0_4px_20px_rgba(0,0,0,0.04)]
-                "
-              >
-                <div className="h-6 w-32 rounded bg-grey-100 animate-pulse" />
-
-                <div className="mt-5 h-px bg-grey-100" />
-
-                <div className="mt-5 space-y-4">
-                  <div className="flex justify-between">
-                    <div className="h-4 w-20 rounded bg-grey-100 animate-pulse" />
-                    <div className="h-4 w-24 rounded bg-grey-100 animate-pulse" />
-                  </div>
-
-                  <div className="flex justify-between">
-                    <div className="h-4 w-24 rounded bg-grey-100 animate-pulse" />
-                    <div className="h-4 w-20 rounded bg-grey-100 animate-pulse" />
-                  </div>
-                </div>
-
-                <div className="mt-6 h-12 rounded-xl bg-grey-100 animate-pulse" />
-              </div>
-            </div>
+            <div className="h-96 rounded-xl border border-gray-200 bg-gray-50 animate-pulse" />
           </div>
         </div>
       </main>
@@ -169,70 +51,21 @@ export default function CartPage() {
   /* ============================================================
      EMPTY CART
   ============================================================ */
-
   if (!cart || cart.items.length === 0) {
     return (
-      <main className="min-h-screen bg-[#FAF9F7]">
-        <div
-          className="
-            mx-auto
-            w-full
-            max-w-[1500px]
-            px-3
-            py-7
-            sm:px-5
-            sm:py-9
-            lg:px-8
-            lg:py-11
-          "
-        >
-          {/* Header */}
+      <main className="min-h-screen bg-white">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 lg:px-8">
+          <nav className="mb-6 flex items-center gap-2 text-[13px] text-gray-500">
+            <Link href="/" className="hover:text-black hover:underline">
+              Accueil
+            </Link>
+          </nav>
 
-          <div className="mb-8">
-            <div
-              className="
-                mb-4
-                inline-flex
-                items-center
-                gap-2
-                rounded-full
-                border
-                border-[#D4AF37]/20
-                bg-[#FFFDF7]
-                px-3
-                py-1.5
-              "
-            >
-              <Sparkles className="h-3.5 w-3.5 text-[#B8860B]" />
+          <h1 className="mb-10 text-[28px] font-bold text-black sm:text-[32px]">
+            Panier
+          </h1>
 
-              <span className="text-xs font-semibold tracking-wide text-[#B8860B]">
-                SmokeGo Collection
-              </span>
-            </div>
-
-            <Heading
-              level="h1"
-              className="text-3xl tracking-tight sm:text-4xl"
-            >
-              Mon panier
-            </Heading>
-
-            <Paragraph muted className="mt-2 max-w-lg">
-              Votre sélection apparaîtra ici. Découvrez nos produits
-              et composez votre expérience SmokeGo.
-            </Paragraph>
-          </div>
-
-          <div
-            className="
-              overflow-hidden
-              rounded-3xl
-              border
-              border-[#D4AF37]/15
-              bg-white
-              shadow-[0_8px_30px_rgba(0,0,0,0.04)]
-            "
-          >
+          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
             <EmptyCart />
           </div>
         </div>
@@ -243,562 +76,81 @@ export default function CartPage() {
   /* ============================================================
      CART
   ============================================================ */
-
   return (
-    <main className="min-h-screen bg-[#FAF9F7]">
-      <div
-        className="
-          mx-auto
-          w-full
-          max-w-[1500px]
-          px-3
-          py-7
-          sm:px-5
-          sm:py-9
-          lg:px-8
-          lg:py-11
-        "
-      >
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto w-full max-w-[1400px] px-4 py-10 sm:px-6 lg:px-8">
 
-        {/* ======================================================
-            PAGE HEADER
-        ======================================================= */}
+        {/* Fil d'Ariane */}
+        <nav className="mb-6 flex items-center gap-2 text-[13px] text-gray-500">
+          <Link href="/" className="hover:text-black hover:underline">
+            Accueil
+          </Link>
+        </nav>
 
-        <div className="mb-8">
+        {/* Titre */}
+        <h1 className="mb-10 text-[28px] font-bold text-black sm:text-[32px]">
+          Panier
+        </h1>
 
-          {/* Badge */}
+        {/* Layout 2 colonnes */}
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-3 lg:gap-10">
 
-          <div
-            className="
-              mb-4
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              border
-              border-[#D4AF37]/20
-              bg-gradient-to-r
-              from-[#D4AF37]/10
-              via-[#FFFDF7]
-              to-white
-              px-3
-              py-1.5
-            "
-          >
-            <div
-              className="
-                flex
-                h-5
-                w-5
-                items-center
-                justify-center
-                rounded-full
-                bg-gradient-to-br
-                from-[#C89B3C]
-                via-[#D4AF37]
-                to-[#B8860B]
-                text-white
-              "
-            >
-              <ShoppingBag className="h-3 w-3" />
+          {/* ============================================
+              COLONNE GAUCHE : Articles
+          ============================================ */}
+          <section className="lg:col-span-2">
+            <div className="divide-y divide-gray-100">
+              {cart.items.map((item) => (
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  onUpdateQuantity={updateQuantity}
+                  onRemove={removeItem}
+                />
+              ))}
             </div>
 
-            <span
-              className="
-                text-xs
-                font-semibold
-                tracking-wide
-                text-[#B8860B]
-              "
-            >
-              SmokeGo Collection
-            </span>
-          </div>
-
-          {/* Title + counter */}
-
-          <div
-            className="
-              flex
-              flex-col
-              gap-4
-              sm:flex-row
-              sm:items-end
-              sm:justify-between
-            "
-          >
-            <div>
-              <div className="flex items-center gap-3">
-                <Heading
-                  level="h1"
-                  className="
-                    text-3xl
-                    tracking-tight
-                    sm:text-4xl
-                  "
-                >
-                  Mon panier
-                </Heading>
-
-                <span
-                  className="
-                    inline-flex
-                    min-w-8
-                    h-8
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-gradient-to-br
-                    from-[#C89B3C]
-                    via-[#D4AF37]
-                    to-[#B8860B]
-                    px-2
-                    text-sm
-                    font-semibold
-                    text-white
-                    shadow-[0_3px_12px_rgba(212,175,55,0.18)]
-                  "
-                >
-                  {itemCount}
-                </span>
-              </div>
-
-              <Paragraph
-                muted
-                className="mt-2 max-w-xl"
-              >
-                Vérifiez votre sélection avant de passer commande.
-              </Paragraph>
-            </div>
-
-            {/* Continuer achats */}
-
+            {/* Continuer mes achats */}
             <button
               type="button"
-              onClick={() => router.push('/shop')}
-              className="
-                group
-                inline-flex
-                shrink-0
-                items-center
-                gap-2
-                text-sm
-                font-medium
-                text-grey-600
-                transition-colors
-                duration-200
-                hover:text-[#B8860B]
-              "
+              onClick={() => router.push('/')}
+              className="group mt-6 inline-flex items-center gap-2 text-[13px] font-medium text-gray-600 transition-colors hover:text-purple-600"
             >
-              <ArrowLeft
-                className="
-                  h-4
-                  w-4
-                  transition-transform
-                  duration-200
-                  group-hover:-translate-x-1
-                "
-              />
-
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Continuer mes achats
             </button>
-          </div>
-        </div>
-
-        {/* ======================================================
-            MAIN CONTENT
-        ======================================================= */}
-
-        <div
-          className="
-            grid
-            grid-cols-1
-            items-start
-            gap-6
-            lg:grid-cols-3
-            lg:gap-8
-          "
-        >
-
-          {/* ====================================================
-              CART ITEMS
-          ===================================================== */}
-
-          <section className="lg:col-span-2">
-
-            <div
-              className="
-                overflow-hidden
-                rounded-2xl
-                border
-                border-[#D4AF37]/15
-                bg-white
-                shadow-[0_6px_25px_rgba(0,0,0,0.04)]
-              "
-            >
-
-              {/* Section header */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  border-b
-                  border-grey-100
-                  bg-gradient-to-r
-                  from-[#FFFDF7]
-                  via-white
-                  to-white
-                  px-5
-                  py-5
-                  md:px-6
-                "
-              >
-                <div className="flex items-center gap-3">
-
-                  <div
-                    className="
-                      flex
-                      h-9
-                      w-9
-                      shrink-0
-                      items-center
-                      justify-center
-                      rounded-xl
-                      bg-[#D4AF37]/10
-                      text-[#B8860B]
-                    "
-                  >
-                    <ShoppingBag
-                      className="h-4 w-4"
-                      strokeWidth={2}
-                    />
-                  </div>
-
-                  <div>
-                    <h2
-                      className="
-                        text-sm
-                        font-semibold
-                        text-black-main
-                      "
-                    >
-                      Articles sélectionnés
-                    </h2>
-
-                    <p className="mt-0.5 text-xs text-grey-500">
-                      {itemCount} article{itemCount > 1 ? 's' : ''}
-                    </p>
-                  </div>
-                </div>
-
-                <span 
-                  className="
-                    hidden
-                    text-xs
-                    font-semibold
-                    uppercase
-                    tracking-[0.18em]
-                    text-[#B8860B]
-                    sm:block
-                  "
-                >
-                  SmokeGo
-                </span>
-              </div>
-
-              {/* Items */}
-
-              <div className="p-4 md:p-6">
-                <div className="divide-y divide-grey-100">
-                  {cart.items.map((item) => (
-                    <CartItem
-                      key={item.id}
-                      item={item}
-                      onUpdateQuantity={updateQuantity}
-                      onRemove={removeItem}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* ==================================================
-                TRUST FEATURES
-            =================================================== */}
-
-            <div
-              className="
-                mt-4
-                grid
-                grid-cols-1
-                gap-3
-                sm:grid-cols-3
-              "
-            >
-
-              {/* Paiement */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-2xl
-                  border
-                  border-grey-100
-                  bg-white
-                  p-4
-                  shadow-[0_3px_15px_rgba(0,0,0,0.025)]
-                "
-              >
-                <div
-                  className="
-                    flex
-                    h-9
-                    w-9
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#D4AF37]/10
-                    text-[#B8860B]
-                  "
-                >
-                  <LockKeyhole
-                    className="h-4 w-4"
-                    strokeWidth={1.8}
-                  />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-black-main">
-                    Paiement sécurisé
-                  </p>
-
-                  <p className="mt-0.5 text-[11px] text-grey-500">
-                    Transactions protégées
-                  </p>
-                </div>
-              </div>
-
-              {/* Livraison */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-2xl
-                  border
-                  border-grey-100
-                  bg-white
-                  p-4
-                  shadow-[0_3px_15px_rgba(0,0,0,0.025)]
-                "
-              >
-                <div
-                  className="
-                    flex
-                    h-9
-                    w-9
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-[#D4AF37]/10
-                    text-[#B8860B]
-                  "
-                >
-                  <Truck
-                    className="h-4 w-4"
-                    strokeWidth={1.8}
-                  />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-black-main">
-                    Livraison rapide
-                  </p>
-
-                  <p className="mt-0.5 text-[11px] text-grey-500">
-                    Suivi de votre commande
-                  </p>
-                </div>
-              </div>
-
-              {/* Premium */}
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-2xl
-                  border
-                  border-[#D4AF37]/15
-                  bg-[#FFFDF7]
-                  p-4
-                  shadow-[0_3px_15px_rgba(0,0,0,0.025)]
-                "
-              >
-                <div
-                  className="
-                    flex
-                    h-9
-                    w-9
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-gradient-to-br
-                    from-[#C89B3C]
-                    via-[#D4AF37]
-                    to-[#B8860B]
-                    text-white
-                  "
-                >
-                  <Sparkles
-                    className="h-4 w-4"
-                    strokeWidth={1.8}
-                  />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold text-black-main">
-                    Expérience premium
-                  </p>
-
-                  <p className="mt-0.5 text-[11px] text-grey-500">
-                    L'univers SmokeGo
-                  </p>
-                </div>
-              </div>
-            </div>
           </section>
 
-          {/* ====================================================
-              SUMMARY
-          ===================================================== */}
+          {/* ============================================
+              COLONNE DROITE : Résumé
+          ============================================ */}
+          <aside className="lg:col-span-1">
+            <div className="rounded-xl border border-gray-200 bg-white p-5">
 
-          <aside
-            className="
-              lg:sticky
-              lg:top-24
-              lg:col-span-1
-            "
-          >
-            <div
-              className="
-                overflow-hidden
-                rounded-2xl
-                border
-                border-[#D4AF37]/15
-                bg-white
-                shadow-[0_8px_30px_rgba(0,0,0,0.05)]
-              "
-            >
+              {/* Titre */}
+              <h2 className="mb-5 text-[18px] font-bold text-black">
+                Résumé
+              </h2>
 
-              {/* Summary header */}
-
-              <div
-                className="
-                  border-b
-                  border-grey-100
-                  bg-gradient-to-r
-                  from-[#FFFDF7]
-                  via-white
-                  to-white
-                  px-5
-                  py-5
-                "
-              >
-                <div className="flex items-center gap-3">
-
-                  <div
-                    className="
-                      flex
-                      h-9
-                      w-9
-                      items-center
-                      justify-center
-                      rounded-xl
-                      bg-gradient-to-br
-                      from-[#C89B3C]
-                      via-[#D4AF37]
-                      to-[#B8860B]
-                      text-white
-                      shadow-[0_3px_12px_rgba(212,175,55,0.15)]
-                    "
-                  >
-                    <ShoppingBag className="h-4 w-4" />
-                  </div>
-
-                  <div>
-                    <h2
-                      className="
-                        font-serif
-                        text-lg
-                        font-semibold
-                        text-black-main
-                      "
-                    >
-                      Résumé
-                    </h2>
-
-                    <p className="mt-0.5 text-xs text-grey-500">
-                      Votre commande SmokeGo
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Existing summary */}
-
-              <div className="p-5">
-                {/* Summary */}
-                <CartSummary
+              {/* Résumé via le composant existant */}
+              <CartSummary
                 subtotal={cart.subtotal || 0}
                 deliveryFee={cart.deliveryFee || 0}
                 discount={cart.discount || 0}
-                total={cart.total || (cart.subtotal || 0) + (cart.deliveryFee || 0) - (cart.discount || 0)}
+                total={
+                  cart.total ||
+                  (cart.subtotal || 0) +
+                    (cart.deliveryFee || 0) -
+                    (cart.discount || 0)
+                }
                 itemCount={itemCount}
                 onCheckout={handleCheckout}
-                />
-              </div>
+              />
 
-              {/* Security */}
-
-              <div
-                className="
-                  mx-5
-                  mb-5
-                  flex
-                  items-center
-                  gap-2.5
-                  rounded-xl
-                  border
-                  border-grey-100
-                  bg-grey-50/50
-                  px-3
-                  py-3
-                "
-              >
-                <ShieldCheck
-                  className="
-                    h-4
-                    w-4
-                    shrink-0
-                    text-[#B8860B]
-                  "
-                  strokeWidth={1.8}
-                />
-
-                <p className="text-[11px] leading-relaxed text-grey-500">
-                  Vos informations et votre paiement sont
-                  protégés.
-                </p>
+              {/* Paiement sécurisé */}
+              <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-gray-500">
+                <Lock className="h-3.5 w-3.5" />
+                <span>Paiement 100% sécurisé</span>
               </div>
             </div>
           </aside>

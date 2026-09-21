@@ -14,14 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      
       {
         protocol: 'https',
         hostname: 'i.pravatar.cc',
         port: '',
         pathname: '/**',
       },
-      
       {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
@@ -33,6 +31,12 @@ const nextConfig = {
         hostname: 'ui-avatars.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/uploads/**',
       },
     ],
   },

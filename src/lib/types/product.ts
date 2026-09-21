@@ -52,6 +52,8 @@ export interface ProductFilters {
   sortBy?: 'price_asc' | 'price_desc' | 'popularity' | 'newest'
   page?: number
   limit?: number
+  skip?: number
+  take?: number
 }
 
 export interface PaginatedResponse<T> {

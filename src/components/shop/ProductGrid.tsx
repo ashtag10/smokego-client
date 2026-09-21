@@ -5,13 +5,11 @@ import type { Product } from '@/lib/types/product'
 interface ProductGridProps {
   products?: Product[]
   isLoading?: boolean
-  onAddToCart?: (productId: string) => void
 }
 
 export const ProductGrid = ({
   products = [],
   isLoading = false,
-  onAddToCart,
 }: ProductGridProps) => {
   const productList = Array.isArray(products) ? products : []
 
@@ -57,7 +55,7 @@ export const ProductGrid = ({
         {Array.from({ length: 8 }).map((_, index) => (
           <div
             key={index}
-            className="min-w-0 w-full"
+            className="w-full min-w-0"
             style={{
               animationDelay: `${index * 60}ms`,
             }}
@@ -167,6 +165,11 @@ export const ProductGrid = ({
     )
   }
 
+  /*
+   * ==========================================
+   * PRODUCT GRID
+   * ==========================================
+   */
   return (
     <div
       className="
@@ -220,10 +223,7 @@ export const ProductGrid = ({
             animationDelay: `${Math.min(index * 45, 400)}ms`,
           }}
         >
-          <ProductCard
-            product={product}
-            onAddToCart={onAddToCart}
-          />
+          <ProductCard product={product} />
         </div>
       ))}
     </div>

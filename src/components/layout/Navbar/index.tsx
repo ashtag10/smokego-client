@@ -1,6 +1,5 @@
 export { Logo } from './Logo'
 export { Navbar } from './Navbar'
-export { NavLinks } from './NavLinks'
 export { SearchBar } from './SearchBar'
 export { CartIcon } from './CartIcon'
 export { UserMenu } from './UserMenu'

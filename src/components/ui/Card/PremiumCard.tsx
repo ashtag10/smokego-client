@@ -17,10 +17,10 @@ export const PremiumCard = ({
   return (
     <div
       className={cn(
-        'bg-white rounded-xl border border-grey-100',
-        'shadow-md',
-        hover && 'hover:shadow-xl hover:border-gold-main/30 transition-all duration-300',
-        !noPadding && 'p-6',
+       
+        'bg-white',
+       
+        !noPadding && 'p-0',
         className
       )}
     >

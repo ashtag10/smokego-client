@@ -3,8 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/stores/authStore'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
-import { VIPCard } from '@/components/profile/VIPCard'
-import { PointsDisplay } from '@/components/profile/PointsDisplay'
 import { DeleteAccount } from '@/components/profile/DeleteAccount'
 import { Heading } from '@/components/ui/Typography/Heading'
 import { useLoyalty } from '@/lib/hooks/useLoyalty'
@@ -53,22 +51,10 @@ export default function ProfilePage() {
         {/* En-tête */}
         <ProfileHeader user={user} onEdit={handleEdit} />
 
-        {/* VIP */}
-        {vipStatus && (
-          <VIPCard
-            vipStatus={vipStatus}
-            onLearnMore={() => router.push('/loyalty')}
-          />
-        )}
+        
 
         {/* Points */}
-        {points && history && (
-          <PointsDisplay
-            points={points}
-            history={history}
-            onRedeem={() => router.push('/loyalty/redeem')}
-          />
-        )}
+       
 
         {/* Suppression de compte */}
         <DeleteAccount onDelete={handleDeleteAccount} />

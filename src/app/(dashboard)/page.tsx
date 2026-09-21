@@ -1,17 +1,25 @@
-import { HeroSection } from '@/components/home/HeroSection'
+import { HeroCarousel } from '@/components/home/HeroCarousel'
+import { StoriesBar } from '@/components/home/StoriesBar'
 import { FeaturedProducts } from '@/components/home/FeaturedProducts'
-import { PopularProducts } from '@/components/home/PopularProducts'
 import { NewArrivals } from '@/components/home/NewArrivals'
-import { LoungePreview } from '@/components/home/LoungePreview'
+import { PopularProducts } from '@/components/home/PopularProducts'
+import { FeaturedCollection } from '@/components/home/FeaturedCollection'
+import { CategoryShowcase } from '@/components/home/CategoryShowcase'
+import { BrandSection } from '@/components/home/BrandSection'
+import { NewsletterSection } from '@/components/home/NewsletterSection'
 
 export default function HomePage() {
   return (
     <div>
-      <HeroSection />
+      <HeroCarousel />
+      <StoriesBar />
       <FeaturedProducts />
-      <PopularProducts />
       <NewArrivals />
-      <LoungePreview />
+      <PopularProducts />
+      <FeaturedCollection />
+      <CategoryShowcase />
+      <BrandSection />
+      <NewsletterSection />
     </div>
   )
 }

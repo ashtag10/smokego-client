@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -10,12 +11,9 @@ import { toast } from 'react-hot-toast'
 
 import { TextInput } from '@/components/ui/Input/TextInput'
 import { PrimaryButton } from '@/components/ui/Button/PrimaryButton'
-import { Heading } from '@/components/ui/Typography/Heading'
-import { Paragraph } from '@/components/ui/Typography/Paragraph'
 import { authApi } from '@/lib/api/auth'
 import { useAuthStore } from '@/lib/stores/authStore'
 
-// Schéma de validation
 const loginSchema = z.object({
   identifier: z.string().min(1, 'Veuillez entrer votre téléphone ou email'),
   password: z
@@ -31,7 +29,6 @@ export default function LoginPage() {
   const { setAuth, isAuthenticated } = useAuthStore()
   const [isLoading, setIsLoading] = useState(false)
 
-  //  Rediriger si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
       const redirect = searchParams.get('redirect') || '/'
@@ -49,7 +46,6 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true)
-
     try {
       const isEmail = data.identifier.includes('@')
       const credentials = isEmail
@@ -60,13 +56,8 @@ export default function LoginPage() {
 
       if (response.success && response.data) {
         const { user, accessToken, refreshToken } = response.data
-
-        //  setAuth stocke maintenant dans les cookies ET localStorage
         setAuth(user, accessToken, refreshToken)
-
         toast.success('Connexion réussie !')
-
-        //  Rediriger vers la page demandée ou l'accueil
         const redirect = searchParams.get('redirect') || '/'
         router.push(redirect)
       } else {
@@ -81,41 +72,29 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
-      <Heading
-        level="h2"
-        className="
-          text-center
-          text-[#F5E7B2]
-          drop-shadow-[0_0_10px_rgba(212,175,55,0.10)]
-        "
-      >
+    <div className="w-full">
+      {/* Logo rond à la place de "SG" */}
+      <div className="mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-black">
+        <Image
+          src="/logo-smokego.png"
+          alt="SmokeGo"
+          width={56}
+          height={56}
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Titre */}
+      <h2 className="mt-4 text-center text-[22px] font-bold text-black sm:text-[26px]">
         Connexion
-      </Heading>
+      </h2>
 
-      <Paragraph
-        muted
-        className="
-          mt-2
-          text-center
-          text-[#CFC6A8]
-        "
-      >
+      <p className="mt-2 text-center text-[13px] text-gray-500">
         Connectez-vous à votre compte SmokeGo
-      </Paragraph>
+      </p>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-6 space-y-4"
-      >
-        <div
-          className="
-            rounded-xl
-            transition-all
-            duration-300
-            focus-within:drop-shadow-[0_0_8px_rgba(212,175,55,0.10)]
-          "
-        >
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+        <div>
           <TextInput
             label="Téléphone ou Email"
             placeholder="+237 699 123 456 ou email@exemple.com"
@@ -125,34 +104,18 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <div
-            className="
-              rounded-xl
-              transition-all
-              duration-300
-              focus-within:drop-shadow-[0_0_8px_rgba(212,175,55,0.10)]
-            "
-          >
-            <TextInput
-              label="Mot de passe"
-              type="password"
-              placeholder="Votre mot de passe"
-              error={errors.password?.message}
-              {...register('password')}
-            />
-          </div>
+          <TextInput
+            label="Mot de passe"
+            type="password"
+            placeholder="Votre mot de passe"
+            error={errors.password?.message}
+            {...register('password')}
+          />
 
           <div className="mt-1 text-right">
             <Link
               href="/forgot-password"
-              className="
-                text-sm
-                text-[#D4AF37]
-                transition
-                duration-300
-                hover:text-[#F5D76E]
-                hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.25)]
-              "
+              className="text-[13px] text-purple-600 transition-colors hover:text-purple-800"
             >
               Mot de passe oublié ?
             </Link>
@@ -163,33 +126,18 @@ export default function LoginPage() {
           type="submit"
           isLoading={isLoading}
           fullWidth
-          className="
-            border
-            border-[#D4AF37]/60
-            shadow-[0_0_12px_rgba(212,175,55,0.08)]
-            transition-all
-            duration-300
-            hover:border-[#F5D76E]/80
-            hover:shadow-[0_0_16px_rgba(212,175,55,0.18)]
-          "
+          className="rounded-lg bg-black py-3 text-[13px] font-medium text-white transition-colors hover:bg-gray-800"
         >
           Se connecter
         </PrimaryButton>
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm text-[#AFA78F]">
+        <p className="text-[13px] text-gray-500">
           Pas encore de compte ?{' '}
           <Link
             href="/register"
-            className="
-              font-medium
-              text-[#D4AF37]
-              transition
-              duration-300
-              hover:text-[#F5D76E]
-              hover:drop-shadow-[0_0_6px_rgba(212,175,55,0.25)]
-            "
+            className="font-medium text-purple-600 transition-colors hover:text-purple-800"
           >
             S'inscrire
           </Link>

@@ -121,6 +121,114 @@ export const productsApi = {
   },
 
   /**
+   * Récupère les produits d'une catégorie (et de ses sous-catégories par défaut)
+   * pour la page /shop/c/[slug]
+   */
+  getByCategory: async (
+    categorySlug: string,
+    options?: {
+      includeSubcategories?: boolean
+      filters?: ProductFilters
+    }
+  ) => {
+    const params = new URLSearchParams()
+
+    // Inclut les sous-catégories par défaut (comportement souhaité :
+    // cliquer sur "Chicha" doit aussi renvoyer les produits de
+    // "Chicha classique", "Chicha de luxe", etc.)
+    params.append(
+      'includeSubcategories',
+      String(options?.includeSubcategories ?? true)
+    )
+
+    if (options?.filters) {
+    Object.entries(options.filters).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, String(v)))
+      } else {
+        params.append(key, String(value))
+      }
+    })
+  }
+
+    const url = `${API_ENDPOINTS.products.byCategory(categorySlug)}?${params.toString()}`
+
+    const response = await apiClient.get<any>(url)
+
+    // Même normalisation que getProducts, pour rester cohérent
+    // quelle que soit la forme renvoyée par l'API
+    if (response.success && response.data) {
+      const data = response.data
+
+      if (data.data && Array.isArray(data.data)) {
+        return {
+          ...response,
+          data: {
+            data: data.data,
+            total: data.total || data.data.length,
+            page: data.page || 1,
+            limit: data.limit || data.data.length,
+            totalPages: data.totalPages || 1,
+          } as PaginatedResponse<Product>
+        }
+      }
+
+      if (Array.isArray(data)) {
+        return {
+          ...response,
+          data: {
+            data: data,
+            total: data.length,
+            page: 1,
+            limit: data.length,
+            totalPages: 1,
+          } as PaginatedResponse<Product>
+        }
+      }
+
+      if (data.products && Array.isArray(data.products)) {
+        return {
+          ...response,
+          data: {
+            data: data.products,
+            total: data.total || data.products.length,
+            page: data.page || 1,
+            limit: data.limit || data.products.length,
+            totalPages: data.totalPages || 1,
+          } as PaginatedResponse<Product>
+        }
+      }
+
+      if (data.items && Array.isArray(data.items)) {
+        return {
+          ...response,
+          data: {
+            data: data.items,
+            total: data.total || data.items.length,
+            page: data.page || 1,
+            limit: data.limit || data.items.length,
+            totalPages: data.totalPages || 1,
+          } as PaginatedResponse<Product>
+        }
+      }
+
+      return {
+        ...response,
+        data: {
+          data: [],
+          total: 0,
+          page: 1,
+          limit: 10,
+          totalPages: 0,
+        } as PaginatedResponse<Product>
+      }
+    }
+
+    return response as any
+  },
+
+  /**
    * Récupère les produits en vedette
    */
   getFeatured: async () => {
@@ -291,4 +399,25 @@ export const productsApi = {
   updateStock: (id: string, adjustment: number, reason?: string) => {
     return apiClient.put(API_ENDPOINTS.products.stock(id), { adjustment, reason })
   },
+
+
+  getCategoryFilters: async (categorySlug: string, includeSubcategories = true) => {
+  const params = new URLSearchParams({ includeSubcategories: String(includeSubcategories) })
+  const url = `${API_ENDPOINTS.products.categoryFilters(categorySlug)}?${params.toString()}`
+  const response = await apiClient.get<any>(url)
+
+  if (response.success && response.data) {
+    const data = response.data.data ?? response.data
+    return {
+      ...response,
+      data: {
+        brands: data.brands ?? [],
+        minPrice: data.minPrice ?? 0,
+        maxPrice: data.maxPrice ?? 0,
+      },
+    }
+  }
+
+  return { ...response, data: { brands: [], minPrice: 0, maxPrice: 0 } }
+},
 }

@@ -1,0 +1,25 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "search": "Search",
+    "cart": "Cart",
+    "account": "My account",
+    "login": "Login"
+  },
+  "Product": {
+    "addToCart": "Add to cart",
+    "outOfStock": "Out of stock",
+    "noImage": "No image",
+    "reviews": "reviews"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save"
+  }
+}
