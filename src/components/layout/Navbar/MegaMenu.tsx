@@ -155,7 +155,7 @@ export const MegaMenu = ({
             )
           })}
 
-        
+       
 
         <Link
           href="/loyalty"

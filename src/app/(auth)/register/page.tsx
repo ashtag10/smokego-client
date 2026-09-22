@@ -17,7 +17,11 @@ const registerSchema = z
   .object({
     name: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
     phone: z.string().min(8, 'Numéro de téléphone invalide'),
-    email: z.string().email('Email invalide').optional().or(z.literal('')),
+    email: z
+      .string()
+      .email('Email invalide')
+      .optional()
+      .or(z.literal('')),
     password: z
       .string()
       .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
@@ -25,7 +29,9 @@ const registerSchema = z
         /^(?=.*[A-Za-z])(?=.*\d)/,
         'Le mot de passe doit contenir au moins 1 lettre et 1 chiffre'
       ),
-    confirmPassword: z.string().min(8, 'Veuillez confirmer votre mot de passe'),
+    confirmPassword: z
+      .string()
+      .min(8, 'Veuillez confirmer votre mot de passe'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Les mots de passe ne correspondent pas',
@@ -55,6 +61,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true)
+
     try {
       const response = await authApi.register({
         name: data.name,
@@ -63,15 +70,37 @@ export default function RegisterPage() {
         password: data.password,
       })
 
-      if (response.success) {
-        toast.success('Inscription réussie ! Vérifiez votre téléphone.')
-        router.push(`/verify-otp?phone=${encodeURIComponent(data.phone)}`)
-      } else {
-        toast.error(response.message || "Erreur lors de l'inscription")
+      if (!response.success) {
+        toast.error(
+          response.message || "Erreur lors de l'inscription"
+        )
+        return
       }
+
+      if (!response.data) {
+        toast.error(
+          "Inscription réussie mais les données utilisateur sont absentes."
+        )
+        return
+      }
+
+      const { user, accessToken, refreshToken } = response.data
+
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
+      localStorage.setItem('user', JSON.stringify(user))
+
+      toast.success('Inscription réussie !')
+
+      router.push('/')
     } catch (error) {
-      toast.error('Une erreur est survenue')
-      console.error(error)
+      console.error('Erreur inscription:', error)
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Une erreur est survenue lors de l'inscription"
+      )
     } finally {
       setIsLoading(false)
     }
@@ -79,8 +108,6 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full">
-
-      {/* Titre */}
       <h2 className="text-center text-[22px] font-bold text-black sm:text-[26px]">
         Inscription
       </h2>
@@ -89,9 +116,10 @@ export default function RegisterPage() {
         Créez votre compte SmokeGo
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
-
-        {/* Nom complet */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-6 space-y-4"
+      >
         <div>
           <TextInput
             label="Nom complet"
@@ -101,7 +129,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* Téléphone */}
         <div>
           <PhoneInput
             label="Téléphone"
@@ -111,7 +138,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* Email */}
         <div>
           <TextInput
             label="Email (optionnel)"
@@ -122,7 +148,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* Mot de passe */}
         <div>
           <TextInput
             label="Mot de passe"
@@ -133,7 +158,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* Confirmer mot de passe */}
         <div>
           <TextInput
             label="Confirmer le mot de passe"
@@ -144,7 +168,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* Bouton */}
         <PrimaryButton
           type="submit"
           isLoading={isLoading}
