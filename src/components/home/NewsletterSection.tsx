@@ -33,7 +33,7 @@ export const NewsletterSection = () => {
         </div>
 
         <p className="mt-6 text-[10px] font-medium uppercase tracking-[0.3em] text-[#B8943E]">
-          Ousmane Chicha
+          Ousmane Hooka
         </p>
 
         <h2 className="mt-3 font-serif text-3xl font-medium tracking-[-0.02em] text-[#1A1A1A] sm:text-4xl lg:text-5xl">

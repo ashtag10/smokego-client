@@ -93,7 +93,7 @@ export const FeaturedCollection = () => {
           {/* CONTENT */}
           <div className="flex flex-col justify-center px-7 py-12 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.3em] text-[#B8943E]">
-              La sélection Ousmane Chicha
+              La sélection Ousmane Hooka
             </p>
 
             <h2 className="max-w-xl font-serif text-4xl font-medium leading-[1.05] tracking-[-0.03em] text-[#1A1A1A] sm:text-5xl lg:text-6xl">

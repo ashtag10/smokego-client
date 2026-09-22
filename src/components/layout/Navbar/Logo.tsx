@@ -21,7 +21,7 @@ export const Logo = () => {
         </span>
 
         <span className="mt-[3px] text-[6px] font-medium uppercase tracking-[0.42em] text-black sm:mt-[4px] sm:text-[7px] lg:text-[8px] lg:tracking-[0.48em]">
-          Chicha
+          Hooka
         </span>
       </div>
     </Link>
