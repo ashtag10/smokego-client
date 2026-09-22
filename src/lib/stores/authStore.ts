@@ -3,24 +3,31 @@ import { persist } from 'zustand/middleware'
 import type { User } from '@/lib/types/user'
 import { apiClient } from '@/lib/api/client'
 
-//  Fonction pour gérer les cookies
 const setCookie = (name: string, value: string, days: number = 30) => {
   if (typeof document === 'undefined') return
+
   const expires = new Date()
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000)
+
   document.cookie = `${name}=${value}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`
 }
 
 const deleteCookie = (name: string) => {
   if (typeof document === 'undefined') return
+
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
 }
 
 const getCookie = (name: string): string | null => {
   if (typeof document === 'undefined') return null
+
   const value = `; ${document.cookie}`
   const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift() || null
+
+  if (parts.length === 2) {
+    return parts.pop()?.split(';').shift() || null
+  }
+
   return null
 }
 
@@ -30,8 +37,11 @@ interface AuthState {
   refreshToken: string | null
   isAuthenticated: boolean
   isLoading: boolean
-
-  setAuth: (user: User, accessToken: string, refreshToken: string) => void
+  setAuth: (
+    user: User,
+    accessToken: string,
+    refreshToken: string
+  ) => void
   setUser: (user: User) => void
   setTokens: (accessToken: string, refreshToken: string) => void
   clearAuth: () => void
@@ -46,82 +56,142 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       isAuthenticated: false,
-      isLoading: false,
+      isLoading: true,
 
       setAuth: (user, accessToken, refreshToken) => {
-        //  Mettre à jour le client API
         apiClient.setTokens(accessToken, refreshToken)
-        
-        //  Stocker dans les cookies pour le proxy
+
         setCookie('accessToken', accessToken)
         setCookie('refreshToken', refreshToken)
-        
-        //  Stocker dans le state
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', accessToken)
+          localStorage.setItem('refreshToken', refreshToken)
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+
         set({
           user,
           accessToken,
           refreshToken,
           isAuthenticated: true,
+          isLoading: false,
         })
       },
 
       setUser: (user) => {
-        set({ user })
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('user', JSON.stringify(user))
+        }
+
+        set({
+          user,
+          isAuthenticated: true,
+          isLoading: false,
+        })
       },
 
       setTokens: (accessToken, refreshToken) => {
         apiClient.setTokens(accessToken, refreshToken)
-        
-        //  Mettre à jour les cookies
+
         setCookie('accessToken', accessToken)
         setCookie('refreshToken', refreshToken)
-        
-        set({ accessToken, refreshToken, isAuthenticated: true })
+
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', accessToken)
+          localStorage.setItem('refreshToken', refreshToken)
+        }
+
+        set({
+          accessToken,
+          refreshToken,
+          isAuthenticated: true,
+          isLoading: false,
+        })
       },
 
       clearAuth: () => {
         apiClient.clearTokens()
-        
-        //  Supprimer les cookies
+
         deleteCookie('accessToken')
         deleteCookie('refreshToken')
-        
+
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('accessToken')
+          localStorage.removeItem('refreshToken')
+          localStorage.removeItem('user')
+        }
+
         set({
           user: null,
           accessToken: null,
           refreshToken: null,
           isAuthenticated: false,
+          isLoading: false,
         })
       },
 
       logout: () => {
-        const { clearAuth } = get()
-        clearAuth()
-        //  Rediriger vers la page de connexion
+        get().clearAuth()
+
         if (typeof window !== 'undefined') {
           window.location.href = '/login'
         }
       },
 
       hydrate: () => {
-        //  Récupérer les tokens depuis les cookies
-        const accessToken = getCookie('accessToken')
-        const refreshToken = getCookie('refreshToken')
-        
-        if (accessToken && refreshToken) {
+        if (typeof window === 'undefined') return
+
+        const accessToken =
+          localStorage.getItem('accessToken') ||
+          getCookie('accessToken')
+
+        const refreshToken =
+          localStorage.getItem('refreshToken') ||
+          getCookie('refreshToken')
+
+        const storedUser = localStorage.getItem('user')
+
+        let user = get().user
+
+        if (storedUser) {
+          try {
+            user = JSON.parse(storedUser) as User
+          } catch {
+            user = get().user
+          }
+        }
+
+        if (accessToken && refreshToken && user) {
           apiClient.setTokens(accessToken, refreshToken)
+
           set({
+            user,
             accessToken,
             refreshToken,
             isAuthenticated: true,
+            isLoading: false,
           })
+
+          return
         }
+
+        set({
+          user: user || null,
+          accessToken: accessToken || null,
+          refreshToken: refreshToken || null,
+          isAuthenticated: Boolean(accessToken && refreshToken && user),
+          isLoading: false,
+        })
       },
     }),
     {
       name: 'smokego-auth',
       partialize: (state) => ({
         user: state.user,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        isAuthenticated: state.isAuthenticated,
       }),
     }
   )

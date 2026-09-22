@@ -12,7 +12,7 @@ import { TextInput } from '@/components/ui/Input/TextInput'
 import { PhoneInput } from '@/components/ui/Input/PhoneInput'
 import { PrimaryButton } from '@/components/ui/Button/PrimaryButton'
 import { authApi } from '@/lib/api/auth'
-import { apiClient } from '@/lib/api/client'
+import { useAuthStore } from '@/lib/stores/authStore'
 
 const registerSchema = z
   .object({
@@ -44,6 +44,7 @@ type RegisterFormData = z.infer<typeof registerSchema>
 export default function RegisterPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const { setAuth } = useAuthStore()
 
   const {
     register,
@@ -85,9 +86,7 @@ export default function RegisterPage() {
 
       const { user, accessToken, refreshToken } = response.data
 
-      apiClient.setTokens(accessToken, refreshToken)
-
-      localStorage.setItem('user', JSON.stringify(user))
+      setAuth(user, accessToken, refreshToken)
 
       toast.success('Inscription réussie !')
 
