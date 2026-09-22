@@ -27,7 +27,7 @@ export const BrandSection = () => {
                 </p>
 
                 <p className="mt-2 text-[9px] font-medium uppercase tracking-[0.55em] text-[#C9A94E]">
-                  Hooka
+                  Chicha
                 </p>
               </div>
             </div>
@@ -52,8 +52,8 @@ export const BrandSection = () => {
 
             <div className="mt-8 max-w-xl space-y-5 text-sm leading-7 text-white/60 sm:text-base">
               <p>
-                Ousmane Hooka est pensé comme un univers autour de la chicha,
-                où la qualité des produits rencontre l'expérience et l'élégance.
+                Ousmane Chicha est pensé comme un univers autour de la chicha,
+                où la qualité des produits rencontre l'expérience du lounge.
               </p>
 
               <p>

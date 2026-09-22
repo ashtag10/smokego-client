@@ -19,8 +19,8 @@ export const Footer = () => {
             <Logo />
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-grey-600">
-              Vente et livraison autour de la Chicha.
-              L'expérience Ousmane Hooka à portée de main.
+              Vente et livraison autour de la chicha.
+              L'expérience Ousmane Chicha à portée de main.
             </p>
           </div>
 

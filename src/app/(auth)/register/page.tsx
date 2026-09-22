@@ -12,6 +12,7 @@ import { TextInput } from '@/components/ui/Input/TextInput'
 import { PhoneInput } from '@/components/ui/Input/PhoneInput'
 import { PrimaryButton } from '@/components/ui/Button/PrimaryButton'
 import { authApi } from '@/lib/api/auth'
+import { apiClient } from '@/lib/api/client'
 
 const registerSchema = z
   .object({
@@ -71,9 +72,7 @@ export default function RegisterPage() {
       })
 
       if (!response.success) {
-        toast.error(
-          response.message || "Erreur lors de l'inscription"
-        )
+        toast.error(response.message || "Erreur lors de l'inscription")
         return
       }
 
@@ -86,8 +85,8 @@ export default function RegisterPage() {
 
       const { user, accessToken, refreshToken } = response.data
 
-      localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
+      apiClient.setTokens(accessToken, refreshToken)
+
       localStorage.setItem('user', JSON.stringify(user))
 
       toast.success('Inscription réussie !')
