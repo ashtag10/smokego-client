@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'react-hot-toast'
-
 import { TextInput } from '@/components/ui/Input/TextInput'
 import { PhoneInput } from '@/components/ui/Input/PhoneInput'
 import { PrimaryButton } from '@/components/ui/Button/PrimaryButton'
@@ -17,7 +16,9 @@ import { useAuthStore } from '@/lib/stores/authStore'
 const registerSchema = z
   .object({
     name: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
-    phone: z.string().min(8, 'Numéro de téléphone invalide'),
+    phone: z
+      .string()
+      .regex(/^(6\d{8}|\+2376\d{8})$/, 'Numéro de téléphone invalide'),
     email: z
       .string()
       .email('Email invalide')
@@ -65,9 +66,14 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
+      const cleanedPhone = data.phone.replace(/\D/g, '')
+      const phone = cleanedPhone.startsWith('237')
+        ? `+${cleanedPhone}`
+        : `+237${cleanedPhone}`
+
       const response = await authApi.register({
         name: data.name,
-        phone: data.phone,
+        phone,
         email: data.email || undefined,
         password: data.password,
       })
