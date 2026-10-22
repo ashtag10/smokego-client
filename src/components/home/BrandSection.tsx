@@ -41,7 +41,8 @@ export const BrandSection = () => {
           {/* RIGHT — CONTENT */}
           <div className="flex flex-col justify-center bg-[#111111] px-7 py-14 sm:px-10 md:px-14 lg:px-16 xl:px-20">
             <p className="mb-5 text-[10px] font-medium uppercase tracking-[0.3em] text-[#C9A94E]">
-              Notre histoire
+              Notre histoire – OUSMAN HOOKAH
+
             </p>
 
             <h2 className="max-w-2xl font-serif text-4xl font-medium leading-[1.05] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
@@ -52,13 +53,19 @@ export const BrandSection = () => {
 
             <div className="mt-8 max-w-xl space-y-5 text-sm leading-7 text-white/60 sm:text-base">
               <p>
-                Ousmane Chicha est pensé comme un univers autour de la chicha,
-                où la qualité des produits rencontre l'expérience du lounge.
+                Née d’une passion pour l’univers de la chicha et d’une ambition 
+                d’offrir le meilleur à nos clients, 
+                OUSMAN HOOKAH s’est construite autour de la qualité, 
+                de l’authenticité et de la satisfaction. 
+                Notre mission est de proposer des produits soigneusement sélectionnés et une expérience unique, 
+                tout en faisant découvrir de nouvelles saveurs aux amateurs de chicha.
+
+
               </p>
 
               <p>
-                Retrouvez une sélection de chichas, saveurs, accessoires et
-                packs, pensée pour accompagner chaque moment avec élégance.
+               OUSMAN HOOKAH — La passion, 
+               la qualité et l’excellence au service de votre expérience.
               </p>
             </div>
 
