@@ -83,18 +83,11 @@ export const Footer = () => {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  href="/delivery"
-                  className="transition-colors duration-300 hover:text-[#B8860B]"
-                >
-                  Livraison
-                </Link>
-              </li>
+             
 
               <li>
                 <Link
-                  href="/contact"
+                 href="https://wa.me/237657874721"
                   className="transition-colors duration-300 hover:text-[#B8860B]"
                 >
                   Contact
