@@ -100,6 +100,23 @@ export const Footer = () => {
                   Contact
                 </Link>
               </li>
+
+              <li>
+                <Link
+                  href="/"
+                  className="transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  Whatsapp : +237 6 57 87 47 21 | Douala, Bonamoussadi - Yapaki
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/"
+                  className="transition-colors duration-300 hover:text-[#B8860B]"
+                >
+                  Telephone : +237 6 70 51 51 46 | Douala, Bonamoussadi - Yapaki
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
